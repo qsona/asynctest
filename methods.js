@@ -5,11 +5,11 @@ function toAsync(fn, delay, context) {
         var newFn = function() {
             try {
                 var result = fn.apply(context, args);
-                callback(null, result);
             } catch (e) {
-                callback(e);
+                return callback(e);
             }
-        });
+            callback(null, result);
+        };
         if (delay) {
             setTimeout(newFn, delay);
         } else {
@@ -30,30 +30,22 @@ exports.sync3 = function() {
     return 3;
 };
 
-exports.sync4 = function(a, b, c) {
-    return a + b + c === 6;
+exports.sync4 = function(a, b) {
+    return a + b === 5;
 };
 
-exports.async1 = function(callback) {
-    setTimeout(function() {
-        callback(null, 1);
-    }, 100);
+exports.sync5 = function() {
+    return 'D';
 };
 
-exports.async2 = function(callback) {
-    setTimeout(function() {
-        callback(null, 2);
-    }, 200);
+exports.sync6 = function(str) {
+    return str.toLowerCase();
 };
 
-exports.async3 = function(callback) {
-    setTimeout(function() {
-        callback(null, 3);
-    }, 300);
-};
+exports.async1 = toAsync(exports.sync1, 100);
+exports.async2 = toAsync(exports.sync2, 200);
+exports.async3 = toAsync(exports.sync3, 300);
+exports.async4 = toAsync(exports.sync4, 100);
+exports.async5 = toAsync(exports.sync5, 100);
+exports.async6 = toAsync(exports.sync6, 50);
 
-exports.async4 = function(a, b, c, callback) {
-    setTimeout(function() {
-        callback(null, a + b + c === 6);
-    }, 100);
-};
