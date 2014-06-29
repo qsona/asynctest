@@ -1,17 +1,39 @@
 var asyncblock = require('asyncblock');
-var fs = require('fs');
-console.log('asdf');
-var a = asyncblock.enableTransform(module);
-console.log('a', a);
 
+function getArray(callback) {
+    setImmediate(function() {
+        callback(null, [5, 10, 15]);
+    });
+}
+function getNum(callback) {
+    setImmediate(function() {
+        callback(null, 10);
+    });
+}
+function sum(num1, num2, callback) {
+    setImmediate(function() {
+        callback(null, num1 + num2);
+    });
+}
+function triple(num, callback) {
+    setImmediate(function() {
+        callback(null, num * 3);
+    });
+}
 
+if (asyncblock.enableTransform(module)) {
+    return;
+}
 
-asyncblock(function(flow) {
-    //Start two parallel file reads
-    var contents1 = fs.readFile('./main.js', 'utf8').sync();
-    var contents2 = fs.readFile('./methods.js', 'utf8').defer();
+asyncblock(function() {
+    var ary = getArray().defer();
+    var num1 = getNum().defer();
+    var num2 = getNum().defer();
+    var sum_result = sum(num1, num2).defer();
 
-    //Print the concatenation of the results when both reads are finished
-    console.log(contents1 + contents2);
+    var result = ary.map(function(n) {
+        return triple(n).defer();
+    });
 
+    console.log(result);
 });

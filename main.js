@@ -1,26 +1,34 @@
 var ex_sync = require('./ex_sync');
 var ex_async = require('./ex_async');
-var ex_asyncblock = require('./ex_asyncblock');
+//var ex_asyncblock = require('./ex_asyncblock');
+var ex_co = require('./ex_co');
 
 var result_sync, result_async, result_asyncblock, result_co;
 
-/*
-console.time(1);
+//var asyncblock = require('asyncblock');
+console.time('sync');
 result_sync = ex_sync.main();
-console.timeEnd(1);
+console.timeEnd('sync');
 console.log(result_sync);
 
-console.time(2);
+console.time('async');
 ex_async.main(function(err, result) {
-    console.timeEnd(2);
+    console.timeEnd('async');
     result_async = result;
     console.log(result_async);
 });
-*/
 
-console.time(3);
+/*
+console.time('asyncblock');
 ex_asyncblock.main(function(err, result) {
-    console.timeEnd(3);
+    console.timeEnd('asyncblock');
     result_asyncblock = result;
     console.log(result_asyncblock);
+});
+*/
+console.time('co');
+ex_co.main(function(err, result) {
+    console.timeEnd('co');
+    result_co = result;
+    console.log('co!', result_co);
 });
